@@ -1,0 +1,10 @@
+1,8,4500,MacBook Air,Apple,A
+2,16,6200,ThinkPad X1,Lenovo,P
+3,4,2100,Inspiron 15,Dell,S
+4,12,5800,ROG Zephyrus,Asus,G
+5,8,3400,IdeaPad 3,Lenovo,B
+6,10,7200,Surface Pro 9,Microsoft,A
+7,6,2800,Aspire 5,Acer,S
+8,16,8900,Blade 16,Razer,U
+9,4,1950,Vivobook 14,Asus,B
+10,8,4100,Latitude 5430,Dell,P

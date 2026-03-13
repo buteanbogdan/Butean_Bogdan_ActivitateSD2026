@@ -60,10 +60,26 @@ void dezalocare(struct Laptop** vector, int* nrElemente) {
 	*nrElemente = 0;
 }
 
-void copiazaAnumiteElemente(struct Laptop* vector, char nrElemente, float prag, struct Laptop** vectorNou, int* dimensiune) {
-	//parametrul prag poate fi modificat in functie de 
-	// tipul atributului ales pentru a indeplini o conditie
-	//este creat un nou vector cu elementele care indeplinesc acea conditie
+void copiazaLaptopuriScumpe(struct Laptop* vector, char nrElemente, float pretMinim, struct Laptop** vectorNou, int* dimensiune) {
+	*dimensiune = 0;
+	for (int i = 0; i < nrElemente; i++) {
+		if (vector[i].pret >= pretMinim) {
+			(*dimensiune)++;
+		}
+	}
+	if ((*vectorNou) != NULL){
+		free(*vectorNou);
+	}
+	*vectorNou = (struct Laptop*)malloc(sizeof(struct Laptop) * (*dimensiune));
+	int k = 0;
+	for (int i = 0; i < nrElemente; i++) {
+		if (vector[i].pret >= pretMinim) {
+			(*vectorNou)[k] = vector[i];
+			(*vectorNou)[k].producator = (char*)malloc(strlen(vector[i].producator) + 1);
+			strcpy_s((*vectorNou)[k].producator, strlen(vector[i].producator) + 1, vector[i].producator);
+			k++;
+		}
+	}
 }
 
 struct Laptop getPrimulElementConditionat(struct Laptop* vector, int nrElemente, const char* conditie) {
@@ -94,5 +110,13 @@ int main() {
 	afisareVector(primeleLaptopuri, nrPrimeleLaptopuri);
 	dezalocare(&primeleLaptopuri, &nrPrimeleLaptopuri);
 	afisareVector(primeleLaptopuri, nrPrimeleLaptopuri);
+
+	//copiaza laptopuri scumpe
+	struct Laptop* laptopuriScumpe = NULL;
+	int nrLaptopuriScumpe = 0;
+	copiazaLaptopuriScumpe(laptopuri, nrLaptop, 2500, &laptopuriScumpe, &nrLaptopuriScumpe);
+	printf("\nLaptopuri scumpe: \n");
+	afisareVector(laptopuriScumpe, nrLaptopuriScumpe);
+	dezalocare(&laptopuriScumpe, &nrLaptopuriScumpe);
 	return 0;
 }

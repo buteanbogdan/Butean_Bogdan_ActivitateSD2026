@@ -50,7 +50,14 @@ struct Laptop* copiazaPrimeleNElemente(struct Laptop* vector, int nrElemente, in
 }
 
 void dezalocare(struct Laptop** vector, int* nrElemente) {
-	//dezalocam elementele din vector si vectorul
+	for (int i = 0; i < (*nrElemente); i++) {
+		if ((*vector)[i].producator != NULL){
+		free((*vector)[i].producator);
+		}
+	}
+	free(*vector);
+	*vector = NULL;
+	*nrElemente = 0;
 }
 
 void copiazaAnumiteElemente(struct Laptop* vector, char nrElemente, float prag, struct Laptop** vectorNou, int* dimensiune) {
@@ -84,6 +91,8 @@ int main() {
 	int nrPrimeleLaptopuri = 2;
 	primeleLaptopuri = copiazaPrimeleNElemente(laptopuri, nrLaptop, nrPrimeleLaptopuri);
 	printf("\nPrimele laptopuri:\n");
+	afisareVector(primeleLaptopuri, nrPrimeleLaptopuri);
+	dezalocare(&primeleLaptopuri, &nrPrimeleLaptopuri);
 	afisareVector(primeleLaptopuri, nrPrimeleLaptopuri);
 	return 0;
 }

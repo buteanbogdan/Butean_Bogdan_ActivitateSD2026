@@ -45,17 +45,44 @@ Laptop citireLaptopFisier(FILE* file) {
 	char buffer[100];
 	char sep[4] = ",;\n";
 	fgets(buffer, 100, file);
+	l.id = atoi(strtok(NULL, sep));
+	l.nrNuclee = atoi(strtok(NULL, sep));
+	l.pret = atof(strtok(NULL, sep));
+	char* aux;
+	aux = strtok(NULL, sep);
+	l.model = (char*)malloc(strlen(aux) + 1);
+	strcpy(l.model, aux);
+	aux = strtok(NULL, sep);
+	l.producator = (char*)malloc(strlen(aux) + 1);
+	strcpy(l.producator, aux);
+	l.serie = strtok(NULL, sep);
+	return l;
 }
 
-Laptop* citireVectorMasiniFisier(const char* numeFisier, int* nrMasiniCitite) {
-	//functia primeste numele fisierului, il deschide si citeste toate masinile din fisier
-	//prin apelul repetat al functiei citireMasinaFisier()
-	//numarul de masini este determinat prin numarul de citiri din fisier
-	//ATENTIE - la final inchidem fisierul/stream-ul
+Laptop* citireVectorMasiniFisier(const char* numeFisier, int* nrLaptopCitite) {
+	FILE* file = fopen(numeFisier, "r");
+	Laptop* laptop = NULL;
+	(*nrLaptopCitite) = 0;
+	while (!feof(file)) {
+		adaugaLaptopInVector(&laptop, nrLaptopCitite, citireLaptopFisier(file));
+	}
+	fclose(file);
+	return laptop;
 }
 
-void dezalocareVectorMasini(Laptop** vector, int* nrMasini) {
-	//este dezalocat intreg vectorul de masini
+void dezalocareVectorMasini(Laptop** vector, int* nrLaptopuri) {
+	for (int i = 0; i < *nrLaptopuri; i++) {
+		if ((*vector)[i].model != NULL) {
+			free((*vector)[i].model);
+		}
+		if ((*vector)[i].producator != NULL) {
+			free((*vector)[i].producator);
+		}
+	}
+	free(*vector);
+	(*vector) = NULL;
+	(*nrLaptopuri) = 0;
+	
 }
 
 int main() {

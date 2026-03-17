@@ -45,7 +45,7 @@ Laptop citireLaptopFisier(FILE* file) {
 	char buffer[100];
 	char sep[4] = ",;\n";
 	fgets(buffer, 100, file);
-	l.id = atoi(strtok(NULL, sep));
+	l.id = atoi(strtok(buffer, sep));
 	l.nrNuclee = atoi(strtok(NULL, sep));
 	l.pret = atof(strtok(NULL, sep));
 	char* aux;
@@ -55,11 +55,11 @@ Laptop citireLaptopFisier(FILE* file) {
 	aux = strtok(NULL, sep);
 	l.producator = (char*)malloc(strlen(aux) + 1);
 	strcpy(l.producator, aux);
-	l.serie = strtok(NULL, sep);
+	l.serie = strtok(NULL, sep)[0];
 	return l;
 }
 
-Laptop* citireVectorMasiniFisier(const char* numeFisier, int* nrLaptopCitite) {
+Laptop* citireVectorLaptopFisier(const char* numeFisier, int* nrLaptopCitite) {
 	FILE* file = fopen(numeFisier, "r");
 	Laptop* laptop = NULL;
 	(*nrLaptopCitite) = 0;
@@ -70,7 +70,7 @@ Laptop* citireVectorMasiniFisier(const char* numeFisier, int* nrLaptopCitite) {
 	return laptop;
 }
 
-void dezalocareVectorMasini(Laptop** vector, int* nrLaptopuri) {
+void dezalocareVectorLaptop(Laptop** vector, int* nrLaptopuri) {
 	for (int i = 0; i < *nrLaptopuri; i++) {
 		if ((*vector)[i].model != NULL) {
 			free((*vector)[i].model);
@@ -86,7 +86,9 @@ void dezalocareVectorMasini(Laptop** vector, int* nrLaptopuri) {
 }
 
 int main() {
-
+	int nrLaptopuri = 0;
+	Laptop* laptopuri = citireVectorLaptopFisier("laptopuri.txt", &nrLaptopuri);
+	afisareVectorLaptop(laptopuri, nrLaptopuri);
 
 	return 0;
 }

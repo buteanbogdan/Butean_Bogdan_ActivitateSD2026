@@ -162,5 +162,20 @@ void stergeLaptopuriSerie(Nod** cap, char serieCautata) {
 
 int main() {
 
+    Nod* cap = citireListaLaptopuriDinFisier("laptopuri.txt");
+
+    printf("--- Lista Laptopuri ---\n");
+    afisareListaLaptopuri(cap);
+
+    printf("\nPretul mediu este: %.2f\n", calculeazaPretMediu(cap));
+
+    const char* brand = "Asus";
+    printf("Pretul total pentru %s este: %.2f\n", brand, calculeazaPretTotalProducator(cap, brand));
+
+    printf("\nStergere seria A...\n");
+    stergeLaptopuriSerie(&cap, 'A');
+    afisareListaLaptopuri(cap);
+
+    dezalocareLista(&cap);
     return 0;
 }

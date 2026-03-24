@@ -24,7 +24,7 @@
     <ClCompile Include="Laborator03.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Laborator04.cpp">
+    <ClCompile Include="Laborator04.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

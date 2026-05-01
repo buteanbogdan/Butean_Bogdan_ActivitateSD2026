@@ -235,7 +235,7 @@ struct NodCoada {
 };
 
 void enqueue(NodCoada** cap, int id) {
-	NodCoada* nou = (NodCoada*)malloc(sizeof(NodCoada)); // <- BUG CORECTAT AICI
+	NodCoada* nou = (NodCoada*)malloc(sizeof(NodCoada)); 
 	nou->id = id;
 	nou->next = NULL;
 	if (*cap) {
@@ -289,7 +289,31 @@ void afisareGrafInLatime(NodPrincipal* graf, int idPlecare) {
 	free(vizitate);
 }
 
+int numaraVeciniDupaSerie(NodPrincipal* graf, int idCautat, unsigned char serieCautata) {
+	
+	NodPrincipal* nodCurent = cautaNodDupaID(graf, idCautat);
+
+	if (nodCurent == NULL) {
+		printf("Laptopul cu ID %d nu a fost gasit in graf.\n", idCautat);
+		return 0;
+	}
+
+	int contor = 0;
+	
+	NodSecundar* p = nodCurent->vecini;
+
+	while (p != NULL) {
+		if (p->nodInfo->info.serie == serieCautata) {
+			contor++;
+		}
+		p = p->next;
+	}
+
+	return contor;
+}
+
 int main() {
+
 	NodPrincipal* graf = citireNoduriLaptopDinFisier("laptopuri.txt");
 	citireMuchiiDinFisier(graf, "muchii.txt");
 
@@ -298,6 +322,12 @@ int main() {
 
 	printf("\n=== Parcurgere in ADANCIME (DFS) incepand cu ID 1 ===\n");
 	afisareGrafInAdancime(graf, 1);
+
+	int idTest = 1;
+	unsigned char serieTest = 'A';
+	int nr = numaraVeciniDupaSerie(graf, idTest, serieTest);
+
+	printf("\nLaptopul %d are %d vecini din seria %c.\n", idTest, nr, serieTest);
 
 	dezalocareNoduriGraf(&graf);
 

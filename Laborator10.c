@@ -228,7 +228,37 @@ float calculeazaPretTotalStiva(Nod** varfStiva) {
     return sumaTotala;
 }
 
+
+Coada extrageLaptopuriDupaProducator(Coada* coadaOriginala, const char* producatorCautat) {
+    // Coada in care vom pune doar laptopurile cautate
+    Coada coadaFiltrata;
+    coadaFiltrata.fata = NULL;
+    coadaFiltrata.spate = NULL;
+
+    // Coada in care vom pune temporar laptopurile care NU corespund
+    Coada coadaAuxiliara;
+    coadaAuxiliara.fata = NULL;
+    coadaAuxiliara.spate = NULL;
+    
+    while (!emptyQueue(*coadaOriginala)) {
+        Laptop extras = dequeue(coadaOriginala);
+        if (strcmp(extras.producator, producatorCautat) == 0) {
+            enqueue(&coadaFiltrata, extras); 
+        }
+        else {
+            enqueue(&coadaAuxiliara, extras); 
+        }
+    }
+   
+    while (!emptyQueue(coadaAuxiliara)) {
+        enqueue(coadaOriginala, dequeue(&coadaAuxiliara));
+    }
+
+    return coadaFiltrata;
+}
 int main() {
+
+
     // 1. TESTARE STIVA
     printf("--- TESTARE STIVA (LIFO) ---\n");
     Nod* stiva = citireStackLaptopuriDinFisier("laptopuri.txt");
@@ -251,12 +281,26 @@ int main() {
     printf("\n--- TESTARE COADA (FIFO) ---\n");
     Coada coada = citireCoadaDeLaptopuriDinFisier("laptopuri.txt");
 
-    printf("Extragem (Dequeue) elementele din coada (vor iesi in ordinea din fisier):\n");
+    const char* brandCautat = "Asus";
+    printf("\nExtragem toate laptopurile '%s' intr-o coada separata...\n", brandCautat);
+
+    // Apelam functia de filtrare pe coada plina!
+    Coada coadaDoarAsus = extrageLaptopuriDupaProducator(&coada, brandCautat);
+
+    printf("\n--- Coada Noua (Doar %s) ---\n", brandCautat);
+    while (!emptyQueue(coadaDoarAsus)) {
+        Laptop extrasa = dequeue(&coadaDoarAsus);
+        afisareLaptop(extrasa);
+        free(extrasa.model); free(extrasa.producator);
+    }
+
+    printf("\n--- Coada Originala (Ce a mai ramas) ---\n");
     while (!emptyQueue(coada)) {
         Laptop extrasa = dequeue(&coada);
         afisareLaptop(extrasa);
         free(extrasa.model); free(extrasa.producator);
     }
 
+   
     return 0;
 }

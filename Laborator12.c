@@ -312,6 +312,35 @@ int numaraVeciniDupaSerie(NodPrincipal* graf, int idCautat, unsigned char serieC
 	return contor;
 }
 
+
+Laptop determinaLaptopCuCeleMaiMulteConexiuni(NodPrincipal* graf) {
+	Laptop laptopMax;
+	laptopMax.id = -1; 
+	int maxLegaturi = -1;
+
+	NodPrincipal* tempPrincipal = graf;
+
+	
+	while (tempPrincipal != NULL) {
+		int legaturiCurente = 0;
+
+		
+		NodSecundar* tempSecundar = tempPrincipal->vecini;
+		
+		while (tempSecundar != NULL) {
+			legaturiCurente++;
+			tempSecundar = tempSecundar->next;
+		}
+		
+		if (legaturiCurente > maxLegaturi) {
+			maxLegaturi = legaturiCurente;
+			laptopMax = tempPrincipal->info; 
+		}
+		tempPrincipal = tempPrincipal->next;
+	}
+
+	return laptopMax;
+}
 int main() {
 
 	NodPrincipal* graf = citireNoduriLaptopDinFisier("laptopuri.txt");
@@ -328,6 +357,17 @@ int main() {
 	int nr = numaraVeciniDupaSerie(graf, idTest, serieTest);
 
 	printf("\nLaptopul %d are %d vecini din seria %c.\n", idTest, nr, serieTest);
+
+	printf("\n--- Analiza Retea ---\n");
+	Laptop laptopPopular = determinaLaptopCuCeleMaiMulteConexiuni(graf);
+
+	if (laptopPopular.id != -1) {
+		printf("Laptopul cu cele mai multe conexiuni din graf este:\n");
+		afisareLaptop(laptopPopular);
+	}
+	else {
+		printf("Graful este gol!\n");
+	}
 
 	dezalocareNoduriGraf(&graf);
 

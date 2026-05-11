@@ -154,6 +154,40 @@ void dezalocareAVL(Nod** radacina) {
 		*radacina = NULL;
 	}
 }
+Laptop cautaLaptopDupaID(Nod* radacina, int idCautat) {
+	if (radacina == NULL) {
+		Laptop eroare;
+		eroare.id = -1;
+		eroare.model = NULL;
+		eroare.producator = NULL;
+		return eroare;
+	}
+	if (radacina->info.id == idCautat) {
+		return radacina->info;
+	}
+	else if (idCautat < radacina->info.id) {
+		return cautaLaptopDupaID(radacina->st, idCautat);
+	}
+	else {
+		return cautaLaptopDupaID(radacina->dr, idCautat);
+	}
+}
+
+
+float calculeazaPretTotalProducator(Nod* radacina, const char* producatorCautat) {
+	if (radacina == NULL) {
+		return 0;
+	}
+
+	float pretCurent = 0;
+	if (strcmp(radacina->info.producator, producatorCautat) == 0) {
+		pretCurent = radacina->info.pret;
+	}
+
+	return pretCurent +
+		calculeazaPretTotalProducator(radacina->st, producatorCautat) +
+		calculeazaPretTotalProducator(radacina->dr, producatorCautat);
+}
 
 int main() {
 	Nod* radacina = NULL;
@@ -172,6 +206,11 @@ int main() {
 	afisareInordine(radacina);
 
 	printf("\nInaltime arbore: %d\n", inaltime(radacina));
+
+	
+	const char* producatorTest = "Asus"; 
+	float total = calculeazaPretTotalProducator(radacina, producatorTest);
+	printf("Valoarea totala a laptopurilor %s este: %.2f\n", producatorTest, total);
 
 	dezalocareAVL(&radacina);
 	return 0;

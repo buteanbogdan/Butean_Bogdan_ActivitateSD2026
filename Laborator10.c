@@ -256,6 +256,35 @@ Coada extrageLaptopuriDupaProducator(Coada* coadaOriginala, const char* producat
 
     return coadaFiltrata;
 }
+Laptop getCelMaiScumpLaptopDinStiva(Nod** varfStiva) {
+    Nod* stivaAuxiliara = NULL;
+    Laptop laptopMax;
+    laptopMax.id = -1; 
+    float pretMax = -1.0f;
+
+    
+    while (!emptyStack(*varfStiva)) {
+        Laptop extrasa = popStack(varfStiva);
+
+       
+        if (extrasa.pret > pretMax) {
+            pretMax = extrasa.pret;
+            laptopMax = extrasa; 
+        }
+
+        
+        pushStack(&stivaAuxiliara, extrasa);
+    }
+
+    
+    while (!emptyStack(stivaAuxiliara)) {
+        pushStack(varfStiva, popStack(&stivaAuxiliara));
+    }
+
+    return laptopMax;
+}
+
+
 int main() {
 
 
@@ -269,7 +298,15 @@ int main() {
     printf("\nCautam laptop ID 2 in stiva:\n");
     Laptop cautat = getLaptopByID(&stiva, 2);
     if (cautat.id != -1) afisareLaptop(cautat);
-
+    printf("\nCautam cel mai scump laptop din stiva:\n");
+    Laptop scump = getCelMaiScumpLaptopDinStiva(&stiva);
+    if (scump.id != -1) {
+        printf("Cel mai scump laptop este: %s %s la pretul de %.2f RON\n",
+            scump.producator, scump.model, scump.pret);
+    }
+    else {
+        printf("Stiva este goala!\n");
+    }
     printf("\nExtragem (Pop) elementele din stiva (vor iesi invers fata de fisier):\n");
     while (!emptyStack(stiva)) {
         Laptop extrasa = popStack(&stiva);

@@ -187,6 +187,37 @@ void afisareGraf(NodPrincipal* graf) {
 		tempGraf = tempGraf->next;
 	}
 }
+float calculeazaPretMediuVecini(NodPrincipal* graf, int idCautat) {
+	
+	NodPrincipal* nodCurent = cautaNodDupaID(graf, idCautat);
+
+	
+	if (nodCurent == NULL) {
+		printf("Eroare: Laptopul cu ID %d nu a fost gasit in graf.\n", idCautat);
+		return 0.0f;
+	}
+
+	float sumaPreturi = 0.0f;
+	int numarVecini = 0;
+
+	
+	NodSecundar* tempVecin = nodCurent->vecini;
+	while (tempVecin != NULL) {
+		
+		sumaPreturi += tempVecin->nodInfo->info.pret;
+		numarVecini++;
+
+		tempVecin = tempVecin->next;
+	}
+
+	
+	if (numarVecini == 0) {
+		return 0.0f;
+	}
+
+	
+	return sumaPreturi / numarVecini;
+}
 
 
 void dezalocareNoduriGraf(NodPrincipal** graf) {
@@ -220,6 +251,17 @@ int main() {
 	
 	printf("--- REPREZENTARE GRAF (LISTA DE LISTE) ---\n\n");
 	afisareGraf(graf);
+
+	printf("\n--- Analiza Vecinatate ---\n");
+	int idTest = 1; 
+	float pretMediu = calculeazaPretMediuVecini(graf, idTest);
+
+	if (pretMediu > 0) {
+		printf("Pretul mediu al laptopurilor conectate la cel cu ID-ul %d este: %.2f RON\n", idTest, pretMediu);
+	}
+	else {
+		printf("Laptopul cu ID-ul %d nu are vecini sau nu exista.\n", idTest);
+	}
 
 	dezalocareNoduriGraf(&graf);
 
